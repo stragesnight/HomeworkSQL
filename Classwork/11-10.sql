@@ -27,7 +27,6 @@ CREATE TABLE Vendors(
     vend_zip char(50) NOT NULL,
     vend_country char(50) NOT NULL
 );
-GO
 
 CREATE TABLE Products(
     prod_id char(10) NOT NULL,
@@ -36,6 +35,7 @@ CREATE TABLE Products(
     prod_price decimal(8,2) NOT NULL,
     prod_desc varchar(1000) NULL
 );
+
 CREATE TABLE Customers(
     cust_id char(10) NOT NULL,
     cust_name char(50) NOT NULL,
@@ -47,11 +47,13 @@ CREATE TABLE Customers(
     cust_contact char(50) NULL,
     cust_email char(255) NULL,
 );
+
 CREATE TABLE Orders(
     order_num int NOT NULL,
     order_date datetime NOT NULL,
     cust_id char(10) NOT NULL,
 );
+
 CREATE TABLE OrderItems(
     order_num int NOT NULL,
     order_item int NOT NULL,
