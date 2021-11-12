@@ -34,13 +34,13 @@ GO
 
 CREATE TABLE Faculties(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
-    , Name nvarchar(100) NOT NULL UNIQUE CHECK (Name != '')
+    , Name nvarchar(48) NOT NULL UNIQUE CHECK (Name != '')
 );
 
 CREATE TABLE Departments(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
     , Financing money NOT NULL DEFAULT 0 CHECK (Financing >= 0)
-    , Name nvarchar(100) NOT NULL UNIQUE CHECK (Name != '')
+    , Name nvarchar(32) NOT NULL UNIQUE CHECK (Name != '')
     , FacultyId int NOT NULL
 
     , CONSTRAINT FK_Departments_FacultyId 
@@ -50,6 +50,7 @@ CREATE TABLE Departments(
 CREATE TABLE Groups(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
     , Name nvarchar(10) NOT NULL UNIQUE CHECK (Name != '')
+    , Students int NOT NULL CHECK (Students > 0)
     , Year int NOT NULL CHECK (Year >= 1 AND Year <= 5)
     , DepartmentId int NOT NULL 
 
@@ -59,20 +60,20 @@ CREATE TABLE Groups(
 
 CREATE TABLE Subjects(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
-    , Name nvarchar(100) NOT NULL UNIQUE CHECK (Name != '')
+    , Name nvarchar(32) NOT NULL UNIQUE CHECK (Name != '')
 );
 
 CREATE TABLE Teachers(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
-    , Name nvarchar(MAX) NOT NULL CHECK (Name != '')
-    , Surname nvarchar(MAX) NOT NULL CHECK (Surname != '')
+    , Name nvarchar(16) NOT NULL CHECK (Name != '')
+    , Surname nvarchar(16) NOT NULL CHECK (Surname != '')
     , Salary money NOT NULL CHECK (Salary > 0)
 );
 
 CREATE TABLE Lectures(
       Id int IDENTITY(1,1) NOT NULL PRIMARY KEY
     , DayOfWeek int NOT NULL CHECK (DayOfWeek >= 1 AND DayOfWeek <= 7)
-    , LectureRoom nvarchar(MAX) NOT NULL CHECK (LectureRoom != '')
+    , LectureRoom nvarchar(16) NOT NULL CHECK (LectureRoom != '')
     , SubjectId int NOT NULL
     , TeacherId int NOT NULL
 
@@ -119,27 +120,27 @@ INSERT INTO Departments (Financing, Name, FacultyId) VALUES
     , (11500, 'Chip Manufacturing', 6);
 GO
 
-INSERT INTO Groups (Name, Year, DepartmentId) VALUES
-      ('BB-001', 1, 1)
-    , ('AB-002', 2, 2)
-    , ('BC-003', 3, 3)
-    , ('CD-004', 4, 4)
-    , ('DE-005', 5, 5)
-    , ('EF-006', 1, 6)
-    , ('FG-007', 2, 7)
-    , ('GH-008', 3, 8)
-    , ('HJ-009', 4, 9)
-    , ('AB-202', 2, 2)
-    , ('BC-203', 3, 3)
-    , ('CD-204', 4, 4)
-    , ('EF-206', 1, 5)
-    , ('FG-207', 2, 7)
-    , ('HJ-209', 4, 9)
-    , ('JK-010', 5, 10)
-    , ('KL-011', 1, 11)
-    , ('LM-012', 2, 12)
-    , ('KL-211', 1, 11)
-    , ('LM-212', 2, 12);
+INSERT INTO Groups (Name, Students, Year, DepartmentId) VALUES
+      ('BB-001', 15, 1, 1)
+    , ('AB-002', 17, 2, 2)
+    , ('BC-003', 16, 3, 3)
+    , ('CD-004', 18, 4, 4)
+    , ('DE-005', 17, 5, 5)
+    , ('EF-006', 19, 1, 6)
+    , ('FG-007', 18, 2, 7)
+    , ('GH-008', 20, 3, 8)
+    , ('HJ-009', 19, 4, 9)
+    , ('AB-202', 21, 2, 1)
+    , ('BC-203', 20, 3, 3)
+    , ('CD-204', 22, 4, 4)
+    , ('EF-206', 21, 1, 5)
+    , ('FG-207', 23, 2, 7)
+    , ('HJ-209', 22, 4, 9)
+    , ('JK-010', 24, 5, 1)
+    , ('KL-011', 23, 1, 11)
+    , ('LM-012', 25, 2, 12)
+    , ('KL-211', 24, 1, 1)
+    , ('LM-212', 27, 2, 12);
 GO
 
 INSERT INTO Subjects (Name) VALUES
@@ -153,10 +154,10 @@ INSERT INTO Subjects (Name) VALUES
     , ('Stock Marker Trading')
     , ('Network Communication Protocols')
     , ('Computer Networks')
-    , ('Network Communication Architectures')
+    , ('Network Architectures')
     , ('History of Computer Viruses')
     , ('Binary Exploitation')
-    , ('History of Semiconductor Computers')
+    , ('History of Semiconductors')
     , ('Chip Manufacturing Progress');
 GO
 
@@ -170,22 +171,22 @@ INSERT INTO Teachers (Name, Surname, Salary) VALUES
     , ('Govard', 'Lovecraft', 2200)
     , ('Hanna', 'Moon', 2300)
     , ('Igor', 'Svetov', 2400)
-    , ('Jach', 'Underhill', 1600)
+    , ('Jack', 'Underhill', 1600)
     , ('Klint', 'Westwood', 1700)
     , ('Lolitta', 'Kryachko', 1800);
 GO
 
 INSERT INTO Lectures (DayOfWeek, LectureRoom, SubjectId, TeacherId) VALUES
-      (1, 'A101', 1, 2) , (1, 'A201', 2, 3) , (1, 'A301', 3, 4) , (1, 'A401', 4, 5)
-    , (2, 'B101', 2, 3) , (2, 'B201', 3, 4) , (2, 'B301', 4, 5) , (2, 'B401', 5, 6)
-    , (3, 'C101', 3, 4) , (3, 'C201', 4, 5) , (3, 'C301', 5, 6) , (3, 'C401', 6, 7)
-    , (4, 'D101', 4, 5) , (4, 'D201', 5, 6) , (4, 'D301', 6, 7) , (4, 'D401', 7, 8)
-    , (5, 'E101', 5, 6) , (5, 'E201', 6, 7) , (5, 'E301', 7, 8) , (5, 'E401', 8, 9)
-    , (1, 'A101', 15, 12) , (1, 'A201', 14, 11) , (1, 'A301', 13, 10) , (1, 'A401', 12, 9)
-    , (2, 'B101', 14, 11) , (2, 'B201', 13, 10) , (2, 'B301', 12, 9) , (2, 'B401', 11, 8)
-    , (3, 'C101', 13, 10) , (3, 'C201', 12, 9) , (3, 'C301', 11, 8) , (3, 'C401', 10, 7)
-    , (4, 'D101', 12, 9) , (4, 'D201', 11, 8) , (4, 'D301', 10, 7) , (4, 'D401', 9, 6)
-    , (5, 'E101', 11, 8) , (5, 'E201', 10, 7) , (5, 'E301', 9, 6) , (5, 'E401', 8, 5);
+      (1, 'A101', 1, 2) , (1, 'A201', 2, 3) , (1, 'A101', 3, 4) , (1, 'A201', 4, 5)
+    , (2, 'B101', 2, 3) , (2, 'D201', 3, 4) , (2, 'D101', 4, 5) , (2, 'D201', 5, 6)
+    , (3, 'C101', 3, 4) , (3, 'C201', 4, 5) , (3, 'C101', 5, 6) , (3, 'C201', 6, 7)
+    , (4, 'D101', 4, 5) , (4, 'D201', 5, 6) , (4, 'D101', 6, 7) , (4, 'D201', 7, 8)
+    , (5, 'E101', 5, 6) , (5, 'E201', 6, 7) , (5, 'E101', 7, 8) , (5, 'E201', 8, 9)
+    , (1, 'A101', 15, 12) , (1, 'A201', 14, 11) , (1, 'A101', 13, 10) , (1, 'A201', 12, 9)
+    , (2, 'B101', 14, 11) , (2, 'B201', 13, 10) , (2, 'B101', 12, 9) , (2, 'B201', 11, 8)
+    , (3, 'C101', 13, 10) , (3, 'C201', 12, 9) , (3, 'C101', 11, 8) , (3, 'C201', 10, 7)
+    , (4, 'D101', 12, 9) , (4, 'D201', 11, 8) , (4, 'D101', 10, 7) , (4, 'D201', 9, 6)
+    , (5, 'A101', 11, 8) , (5, 'A201', 10, 7) , (5, 'D101', 9, 6) , (5, 'D201', 8, 5);
 GO
 
 INSERT INTO GroupsLectures (GroupId, LectureId) VALUES
