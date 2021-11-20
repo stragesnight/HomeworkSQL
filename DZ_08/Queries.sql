@@ -152,7 +152,8 @@ INSERT INTO @TeacherFullNames (FullName)
     INNER JOIN Teachers AS T
         ON T.Id = A.TeacherId;
 
-SELECT FullName FROM @TeacherFullNames;
+SELECT TFN.FullName FROM @TeacherFullNames AS TFN
+ORDER BY TFN.Id;
 GO
 
 -- 9
